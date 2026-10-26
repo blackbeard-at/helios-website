@@ -1,0 +1,1250 @@
+/* HELIOS – Nachbau von helios-hilfen.de (Uncode-Theme) in Astro.
+   Maße und Farben sind am Original bei 1440px Breite gemessen. */
+
+@import '@fontsource-variable/montserrat';
+
+:root {
+  --accent: #ec6622;
+  --accent-2: #f39222;
+  --yellow: #fdc41a;
+  --dark: #323335;
+  --text: #777777;
+  --bg: #f7f7f7;
+  --line: #eaeaea;
+  --white: #ffffff;
+
+  --font: 'Montserrat Variable', 'Montserrat', system-ui, sans-serif;
+
+  --pad: 36px; /* Uncode „single“-Abstand */
+  --header-h: 134px;
+  --header-h-stuck: 87px;
+  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+
+  --shadow-img: 0 70px 140px rgba(253, 113, 48, 0.2);
+  --shadow-card: 0 20px 60px -30px rgba(0, 0, 0, 0.45);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: var(--header-h-stuck);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  color: var(--dark);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+p,
+ul {
+  margin: 0;
+}
+
+strong {
+  font-weight: 600;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- Raster ---------- */
+
+.container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+@media (min-width: 960px) {
+  .container {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 569px) {
+  :root {
+    --pad: 27px;
+  }
+}
+
+/* ---------- Typo-Bausteine ---------- */
+
+/* Orangefarbenes Etikett über Abschnitten („Unsere Vision“ …) */
+.badge {
+  display: inline-block;
+  padding: 0.3em 0.6em;
+  background: var(--accent);
+  color: var(--white);
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.lead {
+  font-size: 18px;
+  line-height: 1.75;
+}
+
+.lead strong {
+  color: var(--dark);
+}
+
+/* Bild mit runden Ecken (Uncode „img-round-lg“) */
+.media {
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media--shadow {
+  box-shadow: var(--shadow-img);
+}
+
+/* Textlink mit Unterstrich, der beim Hover nach rechts verschwindet */
+.link-underline {
+  position: relative;
+  display: inline-block;
+  color: var(--dark);
+}
+
+.link-underline::before {
+  content: '';
+  position: absolute;
+  top: 120%;
+  left: 0;
+  width: 100%;
+  height: 0.075em;
+  background: currentColor;
+  transform-origin: 0% 50%;
+  transition: transform 0.4s cubic-bezier(0.25, 0.45, 0.4, 1);
+  pointer-events: none;
+}
+
+.link-underline span {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.25, 0.45, 0.4, 1);
+}
+
+@media (hover: hover) {
+  .link-underline:hover {
+    color: var(--accent);
+  }
+
+  .link-underline:hover::before {
+    transform-origin: 100% 50%;
+    transform: scaleX(0);
+  }
+
+  .link-underline:hover span {
+    transform: translateY(0.075em);
+  }
+}
+
+/* ---------- Wortweise Überschriften (SplitHeading) ---------- */
+
+.split__line {
+  display: block;
+}
+
+.split__word {
+  position: relative;
+  display: inline-block;
+}
+
+.split__flow {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+}
+
+/* Uncode gibt jedem Wort etwas Luft rechts – beeinflusst die Zeilenumbrüche */
+.split__inner {
+  display: inline-block;
+  padding: 0 0.0575em 0.005em 0;
+}
+
+.split__bar {
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  right: var(--bar-r, 0);
+  bottom: 0;
+  height: 100%;
+  margin-bottom: 0.15em;
+  background: var(--accent);
+  transition: right 0.2s linear var(--d, 0ms);
+}
+
+/* Balken schließen die Wortzwischenräume innerhalb einer Hervorhebung */
+.split__word.is-hl:not(.is-last) {
+  --bar-r: -0.3em;
+}
+
+.split__word.is-first .split__bar {
+  transition-timing-function: ease-in;
+}
+
+.split__word.is-last .split__bar {
+  transition-timing-function: ease-out;
+}
+
+/* Etikett-Variante: Balken über die volle Zeile */
+.split--label .split__bar {
+  height: 115%;
+  bottom: -0.2em;
+}
+
+.split--label .is-first .split__inner {
+  padding-left: 0.5em;
+}
+
+.split--label .is-last .split__inner {
+  padding-right: 0.45em;
+}
+
+/* Marker-Variante: untere Hälfte */
+.split--marker .split__bar {
+  height: 55%;
+  transition-duration: 180ms;
+}
+
+/* Unterstreichung */
+.split--underline .split__bar {
+  height: 20%;
+  opacity: 0.9;
+}
+
+/* ---------- Header ---------- */
+
+.header {
+  height: var(--header-h);
+}
+
+.header__bar {
+  position: fixed;
+  z-index: 50;
+  inset: 0 0 auto;
+  height: var(--header-h);
+  background: var(--bg);
+  transition:
+    height 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.is-stuck .header__bar {
+  height: var(--header-h-stuck);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.header__logo {
+  display: block;
+  flex: none;
+}
+
+.header__logo svg {
+  width: auto;
+  height: 80px;
+  transition: height 0.3s ease;
+}
+
+.is-stuck .header__logo svg {
+  height: 50px;
+}
+
+.nav__list {
+  display: flex;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav__link {
+  display: block;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 14px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.nav__link.is-active,
+.nav__link:hover {
+  color: rgba(236, 102, 34, 0.5);
+}
+
+.burger {
+  display: none;
+}
+
+@media (max-width: 959px) {
+  :root {
+    --header-h: 108px;
+    --header-h-stuck: 72px;
+  }
+
+  .header__logo svg {
+    height: 64px;
+  }
+
+  .is-stuck .header__logo svg {
+    height: 44px;
+  }
+
+  .burger {
+    position: relative;
+    display: block;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  /* Drei Linien, beim Öffnen wird daraus ein Pfeil nach links (wie Uncode) */
+  .burger span,
+  .burger::before,
+  .burger::after {
+    content: '';
+    position: absolute;
+    left: 11px;
+    width: 22px;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--accent);
+    transition:
+      transform 0.3s var(--ease-out),
+      width 0.3s var(--ease-out),
+      top 0.3s var(--ease-out);
+  }
+
+  .burger::before {
+    top: 15px;
+  }
+
+  .burger span {
+    top: 21px;
+  }
+
+  .burger::after {
+    top: 27px;
+  }
+
+  .nav-open .burger::before,
+  .nav-open .burger::after {
+    top: 21px;
+    width: 13px;
+    transform-origin: 1px 50%;
+  }
+
+  .nav-open .burger::before {
+    transform: rotate(-40deg);
+  }
+
+  .nav-open .burger::after {
+    transform: rotate(40deg);
+  }
+
+  .nav {
+    position: fixed;
+    z-index: -1;
+    inset: var(--header-h) 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.3s ease,
+      visibility 0s linear 0.3s,
+      inset 0.3s ease;
+  }
+
+  .is-stuck .nav {
+    inset: var(--header-h-stuck) 0 0;
+  }
+
+  .nav-open .nav {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 0.3s ease,
+      visibility 0s,
+      inset 0.3s ease;
+  }
+
+  .nav__list {
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .nav__link {
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  .nav-open .nav__link {
+    animation: nav-in 0.5s var(--ease-out) both;
+    animation-delay: calc(var(--i) * 60ms + 80ms);
+  }
+
+  .nav-open body {
+    overflow: hidden;
+  }
+}
+
+@keyframes nav-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+/* ---------- Abschnitte ---------- */
+
+.section {
+  position: relative;
+  background: var(--white);
+}
+
+/* Hero: graue Fläche oben rechts (Uncode-Divider, 2/3 Breite, 75% Höhe) */
+.hero {
+  padding-block: var(--pad);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 66.667%;
+  height: 75%;
+  background: var(--bg);
+}
+
+.hero__content {
+  position: relative;
+}
+
+.hero__tagline {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--bg);
+  text-transform: uppercase;
+}
+
+.hero__title {
+  margin-top: 22px;
+  font-size: clamp(42px, 6.25vw, 90px);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 797fr) minmax(0, 380fr);
+  gap: 36px;
+  margin-top: 40px;
+}
+
+.hero__media {
+  aspect-ratio: 3 / 2;
+}
+
+.hero__text {
+  max-width: 370px;
+  margin-top: 18px;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.hero__text .split__line + .split__line {
+  margin-top: 30px;
+}
+
+.hero__text .split__line:first-child + .split__line {
+  margin-top: 0;
+}
+
+/* Vision / Leitbild: Bild und Text nebeneinander */
+.split-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 71px;
+  align-items: center;
+  padding-block: var(--pad);
+}
+
+.split-row__media-wrap {
+  align-self: start;
+}
+
+.split-row__media {
+  aspect-ratio: 4 / 3;
+}
+
+.split-row__body .lead {
+  margin-top: 18px;
+}
+
+.split-row--leitbild {
+  padding-bottom: 144px;
+}
+
+.split-row--leitbild .lead {
+  margin-top: 36px;
+}
+
+.divider {
+  height: 1px;
+  background: var(--accent);
+}
+
+/* Leistungen */
+.leistungen {
+  background: radial-gradient(ellipse at left bottom, rgb(230, 230, 230), rgb(250, 250, 250) 71%);
+}
+
+.leistungen__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 356fr) minmax(0, 785fr);
+  gap: 72px;
+  padding-block: 108px;
+}
+
+.leistungen__intro p {
+  margin-top: 18px;
+}
+
+/* Akkordeon */
+.accordion {
+  border-bottom: 1px solid var(--line);
+}
+
+.acc {
+  border-top: 1px solid var(--line);
+}
+
+.acc__title {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.acc__button {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 36px 48px 36px 0;
+  border: 0;
+  background: none;
+  color: var(--dark);
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+/* Plus-Zeichen, dreht sich beim Öffnen zum Kreuz */
+.acc__button::before,
+.acc__button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  width: 15px;
+  height: 1.5px;
+  margin-top: -0.75px;
+  background: currentColor;
+  transition: transform 0.2s ease-out;
+}
+
+.acc__button::after {
+  transform: rotate(90deg);
+}
+
+.acc__button[aria-expanded='true'],
+.acc__button:hover {
+  color: var(--accent);
+}
+
+.acc__button[aria-expanded='true']::before {
+  transform: rotate(45deg);
+}
+
+.acc__button[aria-expanded='true']::after {
+  transform: rotate(135deg);
+}
+
+.acc__panel {
+  overflow: hidden;
+  transition: height 0.35s ease;
+}
+
+.acc__panel[hidden] {
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.acc__body {
+  padding-bottom: 36px;
+}
+
+.acc__body > * + * {
+  margin-top: 18px;
+}
+
+.acc__body strong {
+  color: var(--dark);
+}
+
+.acc__body ul {
+  padding-left: 18px;
+}
+
+.acc__body li {
+  white-space: pre-line;
+}
+
+.acc__body .acc__h + ul,
+.acc__body .acc__h + p {
+  margin-top: 0;
+}
+
+.acc__body .acc__law {
+  margin-top: 36px;
+}
+
+/* Team */
+.team {
+  padding-top: 81px;
+  padding-bottom: 108px;
+}
+
+.team__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 72px;
+  align-items: start;
+  margin: 37px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+  padding: 36px;
+  border-radius: 12px;
+  background: var(--bg);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.card__avatar {
+  width: 90%;
+  height: auto;
+  aspect-ratio: 1;
+}
+
+.card__name {
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.card__role {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--dark);
+}
+
+.card__role span {
+  display: block;
+}
+
+.card__role strong {
+  font-weight: 700;
+}
+
+.card__rule {
+  width: 100%;
+  height: 1px;
+  margin: 0;
+  border: 0;
+  background: var(--line);
+}
+
+.card__mail {
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  color: var(--dark);
+  transition: color 0.2s ease;
+}
+
+.card__mail:hover {
+  color: var(--accent);
+}
+
+/* ---------- Footer ---------- */
+
+.footer {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.footer__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  padding: 36px 0 72px;
+}
+
+.footer__logo {
+  display: block;
+  width: 302px;
+  max-width: calc(100% - 86px);
+  margin: 17px 0 0 86px;
+}
+
+.footer__logo svg {
+  width: 100%;
+  height: auto;
+}
+
+.footer__main {
+  padding-inline: 36px;
+}
+
+.footer__cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 72px;
+}
+
+.footer__title {
+  color: var(--accent);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.footer__address {
+  margin-top: 18px;
+  font-style: normal;
+}
+
+.footer__address p + p {
+  margin-top: 18px;
+}
+
+.footer__address a:hover {
+  color: var(--accent);
+}
+
+.footer__rule {
+  height: 1px;
+  margin: 22px 0 0;
+  border: 0;
+  background: var(--dark);
+}
+
+.footer__small {
+  margin-top: 18px;
+  font-size: 13px;
+}
+
+.footer__small a:hover {
+  color: var(--accent);
+}
+
+.footer__small + .footer__small {
+  margin-top: 18px;
+}
+
+/* Karte erst nach Klick laden (Google Maps setzt sonst sofort Cookies) */
+.map {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+  background: #e9e6df;
+}
+
+.map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.map__consent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 28px;
+  background:
+    linear-gradient(rgba(247, 247, 247, 0.82), rgba(247, 247, 247, 0.82)),
+    repeating-linear-gradient(35deg, #dfe8d8 0 40px, #e9e6df 40px 120px);
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.map__button {
+  padding: 10px 22px;
+  border: 0;
+  border-radius: 2px;
+  background: var(--accent);
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.map__button:hover {
+  background: #d4561a;
+}
+
+.map__consent a {
+  color: var(--dark);
+  text-decoration: underline;
+}
+
+/* ---------- Punkt-Navigation rechts ---------- */
+
+.dots {
+  position: fixed;
+  z-index: 40;
+  top: 50%;
+  right: 22px;
+  width: 30px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transform: translateY(-50%);
+}
+
+.dots a {
+  position: relative;
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+
+.dots__dot {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+  transition: all 0.1s ease-in-out;
+}
+
+.dots a:hover .dots__dot,
+.dots a.is-active .dots__dot {
+  background: var(--white);
+  transform: scale(1.3);
+}
+
+.dots__label {
+  position: absolute;
+  top: 2px;
+  left: -12px;
+  padding: 6px 18px;
+  border-radius: 2px;
+  background: var(--accent);
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  transform: scale(0.8) translateX(-100%);
+  transform-origin: right center;
+  pointer-events: none;
+  transition:
+    opacity 0.1s ease-out,
+    transform 0.1s ease-out;
+}
+
+.dots__label::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -5px;
+  margin-top: -5px;
+  border: 5px solid transparent;
+  border-right: 0;
+  border-left-color: var(--accent);
+}
+
+.dots a:hover .dots__label {
+  opacity: 1;
+  transform: scale(1) translateX(-100%);
+  transition-delay: 0.1s;
+}
+
+/* ---------- Nach-oben-Button ---------- */
+
+.to-top {
+  position: fixed;
+  z-index: 40;
+  right: 22px;
+  bottom: 22px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--dark);
+  border-radius: 2px;
+  background: var(--dark);
+  color: var(--white);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    visibility 0s linear 0.3s;
+}
+
+.show-top .to-top {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    visibility 0s;
+}
+
+/* ---------- Rechtstexte ---------- */
+
+.legal {
+  padding-block: 72px 108px;
+}
+
+.legal__inner {
+  max-width: 880px;
+}
+
+.legal h1 {
+  font-size: 35px;
+  font-weight: 800;
+}
+
+.legal h2 {
+  margin-top: 36px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.legal p,
+.legal ul {
+  margin-top: 18px;
+}
+
+.legal a {
+  color: var(--accent);
+}
+
+.legal .note {
+  margin-top: 36px;
+  padding: 18px 22px;
+  border-left: 3px solid var(--accent);
+  background: var(--bg);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 959px) {
+  .hero__grid,
+  .split-row,
+  .leistungen__grid,
+  .footer__cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero__grid {
+    gap: 36px;
+  }
+
+  .hero__text {
+    margin-top: 0;
+  }
+
+  .split-row {
+    gap: 36px;
+  }
+
+  /* Leitbild: Bild auf Mobilgeräten zuerst (Uncode „inverted-device-order“) */
+  .split-row--leitbild .split-row__media-wrap {
+    order: -1;
+  }
+
+  .split-row--leitbild {
+    padding-bottom: 72px;
+  }
+
+  .leistungen__grid {
+    gap: 36px;
+    padding-block: 72px;
+  }
+
+  .team__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 36px;
+  }
+
+  .footer__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+    padding-inline: var(--pad);
+  }
+
+  .footer__logo {
+    width: 240px;
+    margin: 0;
+  }
+
+  .footer__main {
+    padding-inline: 0;
+  }
+
+  .footer__cols {
+    gap: 36px;
+  }
+
+  .dots {
+    display: none;
+  }
+}
+
+@media (max-width: 569px) {
+  .hero__text {
+    font-size: 17px;
+  }
+
+  .lead {
+    font-size: 16px;
+  }
+
+  .acc__title {
+    font-size: 17px;
+  }
+
+  .team__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card__avatar {
+    width: 60%;
+  }
+
+  .map {
+    height: 320px;
+  }
+}
+
+/* ---------- Scroll-Animationen (nur mit JS und ohne „Bewegung reduzieren“) ----------
+   Werte wie Uncode: Fade 1s, Einflug aus 100px, Zoom ab 50%, Wortanimation 0.8s */
+
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-anim] {
+    opacity: 0;
+    animation-duration: var(--dur, 0.6s);
+    animation-delay: var(--delay, 0ms);
+    animation-timing-function: ease;
+    animation-fill-mode: both;
+  }
+
+  .js [data-anim].is-in {
+    opacity: 1;
+  }
+
+  .js [data-anim='fade'].is-in {
+    animation-name: anim-fade;
+  }
+
+  .js [data-anim='ltr'].is-in {
+    animation-name: anim-ltr;
+  }
+
+  .js [data-anim='rtl'].is-in {
+    animation-name: anim-rtl;
+  }
+
+  .js [data-anim='btt'].is-in {
+    animation-name: anim-btt;
+  }
+
+  .js [data-anim='zoom'].is-in {
+    animation-name: anim-zoom;
+  }
+
+  /* Wörter steigen aus einer Maske auf, 50ms versetzt */
+  .js .split--curtain .split__flow {
+    overflow: hidden;
+    vertical-align: top;
+  }
+
+  .js .split--curtain .split__inner {
+    transform: translateY(100%);
+  }
+
+  .js .split--curtain.is-in .split__inner {
+    animation: text-btt 0.8s ease both;
+    animation-delay: calc(var(--i, 0) * 50ms);
+  }
+
+  /* Hervorhebungen werden gezeichnet, sobald die Überschrift sichtbar ist */
+  .js [data-split] .split__bar {
+    right: 100%;
+  }
+
+  .js [data-split].is-in .split__bar {
+    right: var(--bar-r, 0);
+  }
+
+  [data-parallax] {
+    will-change: transform;
+  }
+}
+
+@keyframes anim-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes anim-ltr {
+  from {
+    opacity: 0;
+    transform: translate3d(-100px, 0, 0);
+  }
+}
+
+@keyframes anim-rtl {
+  from {
+    opacity: 0;
+    transform: translate3d(100px, 0, 0);
+  }
+}
+
+@keyframes anim-btt {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100px, 0);
+  }
+}
+
+@keyframes anim-zoom {
+  from {
+    opacity: 0.1;
+    transform: scale(0.5);
+  }
+}
+
+@keyframes text-btt {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

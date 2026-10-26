@@ -1,0 +1,10 @@
+// Cloudflare Workers (statische Assets): liefert den Astro-Build aus dist/ aus.
+// Build-Befehl in Cloudflare: npm run build — Deploy: npx wrangler deploy
+{
+  "name": "helios-website",
+  "compatibility_date": "2026-10-23",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

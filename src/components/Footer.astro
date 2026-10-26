@@ -1,0 +1,62 @@
+---
+import Logo from '../assets/logos/helios-logo.svg';
+import { contact } from '../data/site';
+
+interface Props {
+  /** Entwurf C: E-Mail als Link, Footer ist Sprungziel „Kontakt“ */
+  variant?: 'c';
+}
+
+const { variant } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="footer" id={variant ? 'kontakt' : undefined}>
+  <div class="footer__grid">
+    <div>
+      <a class="footer__logo" href="/" aria-label="HELIOS – zur Startseite">
+        <Logo aria-hidden="true" />
+      </a>
+    </div>
+
+    <div class="footer__main">
+      <div class="footer__cols">
+        <div>
+          <h2 class="footer__title">{contact.company}</h2>
+          <address class="footer__address">
+            <p>{contact.street}<br />{contact.city}</p>
+            <p>
+              Tel.: <a href={contact.phoneHref}>{contact.phone}</a><br />
+              Fax: {contact.fax}<br />
+              Email:{' '}
+              {variant ? <a href={`mailto:${contact.email}`}>{contact.email}</a> : contact.email.replace('@', '(at)')}
+            </p>
+            <p>
+              Geschäftsführung:<br />
+              {contact.management}<br />
+              {contact.court}<br />
+              {contact.register}
+            </p>
+          </address>
+        </div>
+
+        <div class="map" data-map={contact.mapsEmbed}>
+          <div class="map__consent">
+            <p>
+              Beim Laden der Karte werden Daten an Google übertragen.<br />
+              Mehr dazu in der <a href="/datenschutz">Datenschutzerklärung</a>.
+            </p>
+            <button class="map__button" type="button" data-map-load>Karte laden</button>
+            <a href={contact.mapsLink} target="_blank" rel="noopener">In Google Maps öffnen</a>
+          </div>
+        </div>
+      </div>
+
+      <hr class="footer__rule" />
+      <p class="footer__small"><a href="/impressum">Impressum</a> | <a href="/datenschutz">Datenschutz</a></p>
+      <p class="footer__small">
+        © {`${year} ${contact.brand}`}. <span style="white-space:nowrap">All rights reserved</span>
+      </p>
+    </div>
+  </div>
+</footer>

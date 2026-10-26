@@ -1,0 +1,2027 @@
+---
+// Entwurf D – „Pergament & Sonne“
+// Anmutung nach einer Stilreferenz (redaktioneller Tech-Look): warmer
+// Pergament-Grund, Serifen-Headlines in normaler Stärke, Monospace für
+// Menü und Labels, Pillen-Knöpfe, Haarlinien, Pastell-Schleier.
+// Übertragen auf HELIOS: Wer Hilfe sucht, fließt in die HELIOS-Sonne und
+// von dort zu den sechs Hilfen. Orange ist der einzige kräftige Akzent.
+import { Image } from 'astro:assets';
+import '@fontsource-variable/source-serif-4';
+import '@fontsource-variable/jetbrains-mono';
+import DraftLayout from '../layouts/DraftLayout.astro';
+import HeliosMark from '../components/HeliosMark.astro';
+import { contact, team } from '../data/site';
+import { hilfen, mailto } from '../data/entwurf';
+import vision from '../assets/images/vision.jpg';
+import leitbild from '../assets/images/leitbild.jpg';
+
+const nav = [
+  { href: '#hilfen', label: 'Leistungen' },
+  { href: '#arbeitsweise', label: 'Arbeitsweise' },
+  { href: '#unser-leitbild', label: 'Unser Leitbild' },
+  { href: '#team', label: 'Team' },
+];
+
+
+const werte = ['Respekt', 'Fairness', 'Vertrauen', 'Gleichberechtigung'];
+
+const stufen = [
+  { name: 'Erfassen', text: 'Belastungen und Ressourcen werden sichtbar, im Clearing oder im ersten Gespräch.' },
+  { name: 'Planen', text: 'Mit Ihnen und dem Jugendamt gestalten wir die Hilfe bedarfsgerecht und individuell.' },
+  { name: 'Begleiten', text: 'Alltagspraktisch, flexibel und gut erreichbar, bis es ohne uns geht.' },
+];
+
+const initials = (name: string) => {
+  const parts = name.split(' ').filter((w) => !w.endsWith('.'));
+  return (parts[0][0] + parts.at(-1)![0]).toUpperCase();
+};
+
+const year = new Date().getFullYear();
+---
+
+<DraftLayout title="Entwurf D · Pergament & Sonne">
+  <div class="d">
+    <p class="announce">
+      <span>Ambulante Kinder- und Jugendhilfe in Bad Vilbel, erreichbar unter {contact.phone}</span>
+      <a class="announce__pill" href={contact.phoneHref}>Anrufen</a>
+    </p>
+
+    <header class="bar">
+      <a class="bar__logo" href="#top" aria-label="HELIOS – nach oben"><HeliosMark class="mark-intro" /></a>
+      <nav class="bar__nav" id="nav-d" aria-label="Hauptmenü">
+        {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+      </nav>
+      <div class="bar__actions">
+        <a class="pill pill--dark" href="#kontakt">Kontakt</a>
+        <a class="pill pill--accent" href={mailto('Anfrage über die Website')}>Hilfe anfragen</a>
+      </div>
+      <button class="bar__menu pill pill--ghost" type="button" aria-expanded="false" aria-controls="nav-d" data-menu>
+        Menü
+      </button>
+    </header>
+
+    <main id="top">
+      <!-- Hero: Serifen-Headline, Monospace-Text, darunter der Fluss zur Sonne -->
+      <section class="hero" aria-labelledby="hero-title">
+        <h1 class="hero__title" id="hero-title">
+          <span class="w" style="--i:0">Positive</span> <span class="w" style="--i:1">Perspektiven</span>
+          <br />
+          <span class="w" style="--i:2">für</span> <span class="w" style="--i:3">junge</span>{' '}<span
+            class="w"
+            style="--i:4">Menschen</span
+          >
+        </h1>
+        <p class="hero__sub">
+          HELIOS ist freier Träger der ambulanten Kinder- und Jugendhilfe. Gemeinsam mit Familien und Jugendämtern
+          gestalten wir Hilfen, die nah am Menschen sind.
+        </p>
+        <p class="hero__actions">
+          <a class="pill pill--accent pill--lg" href={mailto('Anfrage über die Website')}>Hilfe anfragen</a>
+          <a class="pill pill--ghost pill--lg" href="#hilfen">Leistungen ansehen</a>
+        </p>
+      </section>
+
+      <!-- Werte als langsames Laufband -->
+      <section class="werte" aria-label="Unsere Werte">
+        <div class="werte__track">
+          {
+            [0, 1].map((k) => (
+              <p class="werte__row" aria-hidden={k === 1 ? 'true' : undefined}>
+                {werte.map((w) => (
+                  <>
+                    <span>{w}</span>
+                    <i class="werte__sun" />
+                  </>
+                ))}
+                {werte.map((w) => (
+                  <>
+                    <span>{w}</span>
+                    <i class="werte__sun" />
+                  </>
+                ))}
+              </p>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- Vision -->
+      <section class="vision" aria-labelledby="vision-title">
+        <div class="vision__text">
+          <p class="label" data-rise>Unsere Vision</p>
+          <h2 id="vision-title" data-rise>Gleiche Chancen auf ein selbstbestimmtes Leben</h2>
+          <p data-rise>
+            Wir wünschen uns eine Gesellschaft, in der junge Menschen, unabhängig von ihrer Herkunft, gleiche Chancen auf
+            ein selbstbestimmtes und eigenverantwortliches Leben erhalten. Wir stärken Kinder, Jugendliche und ihre Familien
+            darin, ihre Potenziale zu entfalten und Herausforderungen eigenständig zu meistern.
+          </p>
+        </div>
+        <figure class="vision__media" data-rise>
+          <span class="wash wash--peach" aria-hidden="true"></span>
+          <Image
+            src={vision}
+            alt="Eine Pädagogin zeigt zwei Jungen ein kleines Bäumchen"
+            widths={[480, 800, 1100]}
+            sizes="(min-width: 900px) 46vw, 100vw"
+          />
+        </figure>
+      </section>
+
+      <!-- Leistungen als Karten -->
+      <section class="hilfen" id="hilfen" aria-labelledby="hilfen-title">
+        <header class="section-head">
+          <p class="label" data-rise>Leistungen</p>
+          <h2 id="hilfen-title" data-rise>Unsere Hilfen im Überblick</h2>
+          <p data-rise>
+            Gemeinsam mit den Hilfesuchenden und dem ortsansässigen Jugendamt wird jede Hilfe bedarfsgerecht und
+            individuell gestaltet.
+          </p>
+        </header>
+        <div class="cards">
+          {
+            hilfen.map((h) => (
+              <article class="card" id={`hilfe-${h.id}`} data-rise>
+                <p class="tag">{h.ref}</p>
+                <h3>{h.name}</h3>
+                <p class="card__fuer">{h.fuer}.</p>
+                <details class="card__more" data-more>
+                  <summary>Mehr erfahren</summary>
+                  <div class="card__detail">
+                    {h.intro.length > 0 && <p>{h.intro.join(' ')}</p>}
+                    {h.blocks.map((b) =>
+                      b.type === 'h' ? (
+                        <h4>{b.text}</h4>
+                      ) : b.type === 'p' ? (
+                        <p>{b.text}</p>
+                      ) : (
+                        <ul>
+                          {b.items.map((it) => (
+                            <li>{it.replace('\n', ' ')}</li>
+                          ))}
+                        </ul>
+                      ),
+                    )}
+                    <p class="card__actions">
+                      <a class="pill pill--accent" href={mailto(`Anfrage: ${h.name}`)}>
+                        Anfragen
+                      </a>
+                      {h.law && (
+                        <a class="pill pill--ghost" href={h.law.href} target="_blank" rel="noopener">
+                          Gesetzestext
+                        </a>
+                      )}
+                    </p>
+                  </div>
+                </details>
+              </article>
+            ))
+          }
+        </div>
+        <!-- Details aller Hilfen in einem Seitenpanel statt Aufklappen in der Karte -->
+        <dialog class="drawer" aria-labelledby="drawer-title" data-drawer>
+          <div class="drawer__head">
+            <div>
+              <p class="tag" data-drawer-ref></p>
+              <h3 id="drawer-title" data-drawer-title></h3>
+            </div>
+            <button class="drawer__close" type="button" data-drawer-close aria-label="Schließen">×</button>
+          </div>
+          <div class="drawer__body" data-drawer-body></div>
+        </dialog>
+      </section>
+
+      <!-- Arbeitsweise: Pastell-Fläche, Linie mit wanderndem Punkt -->
+      <section class="arbeit" id="arbeitsweise" aria-labelledby="arbeit-title">
+        <div class="arbeit__panel">
+          <span class="wash wash--butter" aria-hidden="true"></span>
+          <span class="wash wash--sky" aria-hidden="true"></span>
+          <p class="label" data-rise>Arbeitsweise</p>
+          <h2 id="arbeit-title" data-rise>Schnell, flexibel und nah am Menschen</h2>
+          <div class="track" aria-hidden="true"><span class="track__dot"></span></div>
+          <ol class="stufen">
+            {
+              stufen.map((s) => (
+                <li data-rise>
+                  <h3>{s.name}</h3>
+                  <p>{s.text}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </section>
+
+      <!-- Unser Leitbild: Bild links, rechts Headline über dem Text -->
+      <section class="haltung" id="unser-leitbild" aria-labelledby="haltung-title">
+        <div class="haltung__grid">
+          <figure class="haltung__media" data-rise>
+            <Image
+              src={leitbild}
+              alt="Ein Vater baut mit zwei Söhnen ein Windrad-Modell zusammen"
+              widths={[480, 800]}
+              sizes="(min-width: 900px) 40vw, 100vw"
+            />
+          </figure>
+          <div class="haltung__text" data-rise>
+            <p class="label">Unser Leitbild</p>
+            <h2 class="haltung__quote" id="haltung-title">
+              Wir richten unsere Arbeit konsequent an den Ressourcen und Bedürfnissen der jungen Menschen und ihrer
+              Familien aus.
+            </h2>
+            <p>
+              Ziel ist es, durch nachhaltig wirksame Maßnahmen die Notwendigkeit sozialpädagogischer Hilfen langfristig zu
+              beenden und die Kompetenz zur selbstbestimmten Lebensführung zu fördern.
+            </p>
+            <p>
+              Unsere Fachkräfte aus pädagogischen und psychologischen Disziplinen entwickeln individuelle,
+              ressourcenorientierte und systemische Handlungsstrategien. Durch vertrauensvolle Zusammenarbeit entstehen
+              tragfähige Beziehungen, die echte Veränderung ermöglichen.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Team -->
+      <section class="team" id="team" aria-labelledby="team-title">
+        <header class="section-head">
+          <p class="label" data-rise>Team</p>
+          <h2 id="team-title" data-rise>Ihre Ansprechpartner</h2>
+        </header>
+        <ul class="people">
+          {
+            team.map((p) => (
+              <li class="person" data-rise>
+                <span class="person__initials" aria-hidden="true">
+                  {initials(p.name)}
+                </span>
+                <h3>{p.name}</h3>
+                <p class="person__role">{[...p.lines, p.role].join(' · ')}</p>
+                <a class="pill pill--ghost pill--sm" href={`mailto:${p.email}`}>
+                  E-Mail schreiben
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Kontakt -->
+      <section class="kontakt" id="kontakt" aria-labelledby="kontakt-title">
+        <div class="kontakt__panel">
+          <div class="flow__glow flow__glow--cta" aria-hidden="true"></div>
+          <span class="kontakt__sun" aria-hidden="true"><HeliosMark variant="icon" class="mark-emit" /></span>
+          <h2 id="kontakt-title" data-rise>Sprechen Sie mit uns</h2>
+          <p data-rise>Familien, junge Menschen und Fachkräfte der Jugendämter erreichen uns direkt.</p>
+          <p class="kontakt__actions" data-rise>
+            <a class="pill pill--accent pill--lg" href={contact.phoneHref}>{contact.phone}</a>
+            <a class="pill pill--dark pill--lg" href={`mailto:${contact.email}`}>{contact.email}</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot__brand">
+        <HeliosMark class="mark-intro" />
+        <p>Freier Träger der ambulanten Kinder- und Jugendhilfe.</p>
+      </div>
+      <div>
+        <p class="label">Adresse</p>
+        <p>{contact.company}<br />{contact.street}<br />{contact.city}</p>
+        <p><a class="link" href={contact.mapsLink} target="_blank" rel="noopener">In Google Maps öffnen</a></p>
+      </div>
+      <div>
+        <p class="label">Kontakt</p>
+        <p>
+          Telefon <a class="link" href={contact.phoneHref}>{contact.phone}</a><br />
+          Fax {contact.fax}<br />
+          <a class="link" href={`mailto:${contact.email}`}>{contact.email}</a>
+        </p>
+      </div>
+      <div>
+        <p class="label">Rechtliches</p>
+        <p>Geschäftsführung: {contact.management}<br />{contact.court.replace(':', '')}, {contact.register}</p>
+        <p><a class="link" href="/impressum">Impressum</a> · <a class="link" href="/datenschutz">Datenschutz</a></p>
+      </div>
+      <p class="foot__meta">© {`${year} ${contact.brand}`}</p>
+    </footer>
+  </div>
+</DraftLayout>
+
+<script>
+  import { initRise } from '../scripts/draft';
+  initRise();
+
+  // Leistungen: „Mehr erfahren“ öffnet ein Seitenpanel, die Kartenreihe bleibt
+  // gleich hoch. Ohne JS klappen die Karten wie bisher auf.
+  const drawer = document.querySelector<HTMLDialogElement>('[data-drawer]');
+  if (drawer && 'showModal' in drawer) {
+    const body = drawer.querySelector<HTMLElement>('[data-drawer-body]')!;
+    let opener: HTMLElement | null = null;
+    const close = () => {
+      drawer.classList.add('is-closing');
+      setTimeout(() => {
+        drawer.classList.remove('is-closing');
+        drawer.close();
+        opener?.focus();
+      }, 200);
+    };
+    document.querySelectorAll<HTMLDetailsElement>('[data-more]').forEach((d) => {
+      const summary = d.querySelector('summary')!;
+      summary.addEventListener('click', (e) => {
+        e.preventDefault();
+        const card = d.closest('.card')!;
+        drawer.querySelector('[data-drawer-ref]')!.textContent = card.querySelector('.tag')!.textContent;
+        drawer.querySelector('[data-drawer-title]')!.textContent = card.querySelector('h3')!.textContent;
+        body.replaceChildren(...[...d.querySelector('.card__detail')!.children].map((n) => n.cloneNode(true)));
+        opener = summary as HTMLElement;
+        drawer.showModal();
+        body.scrollTop = 0;
+      });
+    });
+    drawer.querySelector('[data-drawer-close]')!.addEventListener('click', close);
+    drawer.addEventListener('cancel', (e) => {
+      e.preventDefault();
+      close();
+    });
+    drawer.addEventListener('click', (e) => {
+      if (e.target === drawer) close();
+    });
+  }
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Kopfleiste bekommt beim Scrollen eine Haarlinie
+  const bar = document.querySelector<HTMLElement>('.bar')!;
+  const onScroll = () => bar.classList.toggle('is-stuck', scrollY > 60);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Menü auf dem Telefon
+  const menu = document.querySelector<HTMLButtonElement>('[data-menu]')!;
+  menu.addEventListener('click', () => {
+    const open = menu.getAttribute('aria-expanded') !== 'true';
+    menu.setAttribute('aria-expanded', String(open));
+    bar.classList.toggle('is-open', open);
+  });
+  bar.querySelectorAll('.bar__nav a').forEach((a) =>
+    a.addEventListener('click', () => {
+      menu.setAttribute('aria-expanded', 'false');
+      bar.classList.remove('is-open');
+    }),
+  );
+
+  // Arbeitsweise: Punkt wandert mit dem Scrollen über die Linie
+  const track = document.querySelector<HTMLElement>('.track');
+  if (track && !reduce) {
+    const panel = track.closest('section')!;
+    const upd = () => {
+      const r = panel.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight + r.height * 0.6)));
+      track.style.setProperty('--p', p.toFixed(3));
+    };
+    addEventListener('scroll', upd, { passive: true });
+    upd();
+  }
+</script>
+
+<style is:global>
+  /* ---------- Tokens (nur Entwurf D) ---------- */
+  .d {
+    --parchment: #f6f3ef;
+    --sand: #efe9e2;
+    --ink: #1d1c1b;
+    --graphite: #4a4744;
+    --smoke: #69655f;
+    --ash: #d9d2ca;
+    --accent: #ec6622;
+    --apricot: #f39222;
+    --butter: #fdc41a;
+    --peach: #ffc6a3;
+    --butter-soft: #fde7a3;
+    --sky-soft: #cddcf3;
+
+    --serif: 'Source Serif 4 Variable', Georgia, 'Times New Roman', serif;
+    --mono: 'JetBrains Mono Variable', 'IBM Plex Mono', ui-monospace, monospace;
+    --wrap: min(1432px, 100% - 2 * var(--gutter));
+    --gutter: clamp(20px, 3vw, 44px);
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* Schleier und Leuchten dürfen über den Rand ragen, ohne seitlich zu scrollen */
+    overflow-x: clip;
+    background: var(--parchment);
+    color: var(--graphite);
+    font-family: var(--mono);
+    font-size: 16px;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+
+  body:has(.d) {
+    background: #f6f3ef;
+  }
+
+  .d h1,
+  .d h2,
+  .d h3 {
+    color: var(--ink);
+    font-family: var(--serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+  }
+
+  .d h2 {
+    font-size: clamp(34px, 3.6vw, 52px);
+  }
+
+  .d h3 {
+    font-size: 26px;
+  }
+
+  .d .label {
+    color: var(--smoke);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .d .link {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--ash);
+    text-underline-offset: 0.25em;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .d .link:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  /* Pillen-Knöpfe: Monospace, Großbuchstaben, 100px Radius */
+  .d .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 22px;
+    border: 1px solid transparent;
+    border-radius: 100px;
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      color 0.25s ease,
+      transform 0.25s var(--ease);
+  }
+
+  .d .pill:active {
+    transform: scale(0.97);
+  }
+
+  .d .pill--lg {
+    min-height: 52px;
+    padding: 14px 28px;
+    font-size: 15px;
+  }
+
+  .d .pill--sm {
+    min-height: 40px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  /* Dunkle Schrift auf Orange: 5:1 statt 3:1 mit Weiß */
+  .d .pill--accent {
+    background: var(--accent);
+    color: var(--ink);
+  }
+
+  .d .pill--accent:hover {
+    background: var(--apricot);
+  }
+
+  .d .pill--dark {
+    background: #242424;
+    color: var(--parchment);
+  }
+
+  .d .pill--dark:hover {
+    background: #3a3836;
+  }
+
+  .d .pill--ghost {
+    border-color: var(--ash);
+    background: transparent;
+    color: var(--ink);
+  }
+
+  .d .pill--ghost:hover {
+    border-color: var(--ink);
+    background: var(--sand);
+  }
+
+  /* ---------- Hinweisleiste und Kopf ---------- */
+  .d .announce {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px 18px;
+    padding: 12px var(--gutter);
+    background: #000;
+    color: var(--parchment);
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .d .announce__pill {
+    padding: 6px 14px;
+    border-radius: 100px;
+    background: var(--parchment);
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease;
+  }
+
+  .d .announce__pill:hover {
+    background: var(--butter-soft);
+  }
+
+  .d .bar {
+    position: sticky;
+    z-index: 30;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 22px var(--gutter);
+    background: var(--parchment);
+    border-bottom: 1px solid transparent;
+    transition:
+      border-color 0.3s ease,
+      padding 0.3s ease;
+  }
+
+  .d .bar.is-stuck {
+    padding-block: 14px;
+    border-bottom-color: var(--ash);
+  }
+
+  .d .bar__logo svg {
+    width: auto;
+    height: 40px;
+  }
+
+  .d .bar__nav {
+    display: flex;
+    gap: 32px;
+  }
+
+  .d .bar__nav a {
+    position: relative;
+    color: var(--ink);
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .d .bar__nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease);
+  }
+
+  .d .bar__nav a:hover::after {
+    transform: scaleX(1);
+  }
+
+  .d .bar__actions {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+  }
+
+  .d .bar__menu {
+    display: none;
+  }
+
+  @media (max-width: 1000px) {
+    .d .bar {
+      gap: 12px;
+      padding-block: 14px;
+    }
+
+    .d .bar__logo svg {
+      height: 32px;
+    }
+
+    .d .bar__actions .pill--dark {
+      display: none;
+    }
+
+    .d .bar__actions {
+      margin-left: auto;
+    }
+
+    .d .bar__actions .pill {
+      min-height: 40px;
+      padding: 8px 14px;
+      font-size: 12px;
+    }
+
+    .d .bar__menu {
+      display: inline-flex;
+      min-height: 40px;
+      padding: 8px 14px;
+      font-size: 12px;
+    }
+
+    .d .bar__nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      padding: 8px var(--gutter) 24px;
+      border-bottom: 1px solid var(--ash);
+      background: var(--parchment);
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition:
+        opacity 0.2s ease,
+        transform 0.3s var(--ease),
+        visibility 0s linear 0.3s;
+    }
+
+    .d .bar.is-open .bar__nav {
+      visibility: visible;
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity 0.2s ease,
+        transform 0.3s var(--ease);
+    }
+
+    .d .bar__nav a {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--ash);
+      font-size: 16px;
+    }
+  }
+
+  /* ---------- Hero ---------- */
+  .d .hero {
+    width: var(--wrap);
+    margin: 0 auto;
+    padding-top: clamp(64px, 9vh, 120px);
+    text-align: center;
+  }
+
+  .d .hero__title {
+    font-size: clamp(44px, 6vw, 88px);
+    line-height: 1.06;
+  }
+
+  .d .hero__sub {
+    max-width: 50ch;
+    margin: 32px auto 0;
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  .d .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 40px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Wörter erscheinen weich, wie scharfgestellt */
+    .js .d .hero__title .w {
+      display: inline-block;
+      animation: focus-in 1.1s var(--ease) both;
+      animation-delay: calc(var(--i) * 90ms + 100ms);
+    }
+
+    .js .d .hero__sub,
+    .js .d .hero__actions {
+      animation: soft-up 0.9s var(--ease) 0.6s both;
+    }
+
+    .js .d .hero__actions {
+      animation-delay: 0.75s;
+    }
+
+    .js .d .flow {
+      animation: soft-up 1.2s var(--ease) 0.9s both;
+    }
+  }
+
+  @keyframes focus-in {
+    from {
+      opacity: 0;
+      filter: blur(10px);
+      transform: translateY(14px);
+    }
+  }
+
+  @keyframes soft-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+
+  /* ---------- Fluss-Diagramm ---------- */
+  .d .flow__hint {
+    margin-top: clamp(64px, 9vh, 104px);
+    color: var(--smoke);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .d .flow {
+    position: relative;
+    aspect-ratio: 1200 / 560;
+    margin-top: 12px;
+  }
+
+  .d .flow__glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 46%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(
+      closest-side,
+      rgba(253, 196, 26, 0.55),
+      rgba(255, 198, 163, 0.45) 45%,
+      rgba(255, 198, 163, 0) 100%
+    );
+    filter: blur(8px);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Die Sonne geht auf und „atmet“ danach ruhig */
+    .js .d .flow .flow__glow {
+      animation:
+        sunrise 2.2s var(--ease) 0.9s both,
+        breathe 6s ease-in-out 3.1s infinite;
+    }
+  }
+
+  @keyframes sunrise {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -20%) scale(0.6);
+    }
+  }
+
+  @keyframes breathe {
+    50% {
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+  }
+
+  .d .flow__lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .d .line__base {
+    fill: none;
+    stroke: var(--ash);
+    stroke-width: 1.2;
+    transition:
+      stroke 0.35s ease,
+      opacity 0.35s ease;
+  }
+
+  .d .line__dash {
+    fill: none;
+    stroke: var(--apricot);
+    stroke-width: 1.6;
+    stroke-dasharray: 6 18;
+    opacity: 0.55;
+    transition: opacity 0.35s ease;
+  }
+
+  .d .dot {
+    fill: var(--accent);
+  }
+
+  .d .dot--out {
+    fill: var(--butter);
+    stroke: var(--apricot);
+    stroke-width: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .d .line__dash {
+      animation: flow-dash 2.4s linear infinite;
+    }
+  }
+
+  @keyframes flow-dash {
+    to {
+      stroke-dashoffset: -48;
+    }
+  }
+
+  /* Auswahl: passende Wege leuchten, der Rest tritt zurück */
+  .d .flow[data-active] .line {
+    opacity: 0.22;
+    transition: opacity 0.35s ease;
+  }
+
+  .d .flow[data-active] .line.is-on,
+  .d .flow[data-active='alle'] .line,
+  .d .flow[data-active='jung'] .line--out.g-jung,
+  .d .flow[data-active='familie'] .line--out.g-familie,
+  .d .flow[data-active='erwachsen'] .line--out.g-erwachsen {
+    opacity: 1;
+  }
+
+  .d .flow[data-active] .line.is-on .line__base,
+  .d .flow[data-active='alle'] .line .line__base,
+  .d .flow[data-active='jung'] .line--out.g-jung .line__base,
+  .d .flow[data-active='familie'] .line--out.g-familie .line__base,
+  .d .flow[data-active='erwachsen'] .line--out.g-erwachsen .line__base {
+    stroke: var(--accent);
+  }
+
+  .d .flow__in,
+  .d .flow__out {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .d .flow__in li,
+  .d .flow__out li {
+    position: absolute;
+    top: calc(var(--y) / 560 * 100%);
+    transform: translateY(-50%);
+  }
+
+  .d .flow__in li {
+    right: calc(100% - 232 / 1200 * 100%);
+  }
+
+  .d .flow__out li {
+    left: calc(968 / 1200 * 100%);
+  }
+
+  .d .node {
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 8px 18px;
+    border: 1px solid var(--ink);
+    border-radius: 100px;
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      opacity 0.3s ease,
+      transform 0.25s var(--ease);
+  }
+
+  .d .node:hover {
+    background: var(--butter-soft);
+  }
+
+  .d .node[aria-pressed='true'] {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .d .node--out {
+    border-color: var(--ash);
+    background: #fffdfa;
+  }
+
+  .d .flow[data-active] .node--out {
+    opacity: 0.4;
+  }
+
+  .d .flow[data-active='alle'] .node--out,
+  .d .flow[data-active='jung'] .node--out.g-jung,
+  .d .flow[data-active='familie'] .node--out.g-familie,
+  .d .flow[data-active='erwachsen'] .node--out.g-erwachsen {
+    opacity: 1;
+    border-color: var(--accent);
+    background: var(--butter-soft);
+    transform: translateX(4px);
+  }
+
+  .d .flow__hub {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(200 / 1200 * 100%);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  .d .hub__arcs {
+    position: absolute;
+    left: -30%;
+    width: 160%;
+    top: -18%;
+    overflow: visible;
+  }
+
+  .d .arc {
+    fill: none;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+  }
+
+  .d .arc--1 {
+    stroke: var(--butter);
+  }
+
+  .d .arc--2 {
+    stroke: var(--apricot);
+  }
+
+  .d .arc--3 {
+    stroke: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Die Bögen aus dem Logo zeichnen sich wie Sonnenstrahlen */
+    .js .d .arc {
+      stroke-dasharray: 260;
+      stroke-dashoffset: 260;
+      animation: draw 1.8s var(--ease) forwards;
+    }
+
+    .js .d .arc--1 {
+      animation-delay: 1.6s;
+    }
+
+    .js .d .arc--2 {
+      animation-delay: 1.4s;
+    }
+
+    .js .d .arc--3 {
+      animation-delay: 1.2s;
+    }
+  }
+
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .d .hub__sun {
+    position: absolute;
+    inset: 22%;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--ash);
+    border-radius: 50%;
+    background: var(--parchment);
+  }
+
+  .d .hub__sun svg {
+    width: 62%;
+    height: auto;
+  }
+
+  @media (max-width: 900px) {
+    .d .flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      aspect-ratio: auto;
+      padding-block: 24px;
+    }
+
+    .d .flow__lines {
+      display: none;
+    }
+
+    .d .flow__in,
+    .d .flow__out {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .d .flow__in li,
+    .d .flow__out li {
+      position: static;
+      transform: none;
+    }
+
+    .d .flow__hub {
+      position: relative;
+      top: auto;
+      left: auto;
+      width: 150px;
+      transform: none;
+    }
+
+    .d .flow__glow {
+      width: 120%;
+    }
+
+    .d .node {
+      min-height: 40px;
+      padding: 6px 14px;
+      font-size: 12px;
+    }
+  }
+
+  /* ---------- Werte-Laufband ---------- */
+  .d .werte {
+    margin-top: clamp(80px, 10vh, 128px);
+    overflow: hidden;
+    border-block: 1px solid var(--ash);
+  }
+
+  .d .werte__track {
+    display: flex;
+    width: max-content;
+  }
+
+  .d .werte__row {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 26px 20px;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: clamp(28px, 3vw, 44px);
+    white-space: nowrap;
+  }
+
+  .d .werte__sun {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow:
+      0 0 0 6px rgba(243, 146, 34, 0.25),
+      0 0 0 12px rgba(253, 196, 26, 0.18);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .d .werte__track {
+      animation: marquee 40s linear infinite;
+    }
+
+    .d .werte:hover .werte__track {
+      animation-play-state: paused;
+    }
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* ---------- Vision ---------- */
+  .d .vision {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(40px, 6vw, 104px);
+    align-items: center;
+    width: var(--wrap);
+    margin: 0 auto;
+    padding-block: clamp(96px, 12vw, 176px);
+  }
+
+  .d .vision__text > * + * {
+    margin-top: 24px;
+  }
+
+  .d .vision__text p:not(.label) {
+    max-width: 52ch;
+    font-size: 17px;
+  }
+
+  .d .vision__media,
+  .d .haltung__media {
+    position: relative;
+    margin: 0;
+  }
+
+  .d .vision__media img,
+  .d .haltung__media img {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 40px;
+  }
+
+  /* Weiche Pastell-Schleier hinter Bildern und Flächen */
+  .d .wash {
+    position: absolute;
+    width: 70%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    filter: blur(50px);
+    pointer-events: none;
+  }
+
+  .d .wash--peach {
+    top: -14%;
+    right: -12%;
+    background: var(--peach);
+    opacity: 0.8;
+  }
+
+  .d .wash--butter {
+    top: -30%;
+    left: -10%;
+    background: var(--butter-soft);
+  }
+
+  .d .wash--sky {
+    bottom: -40%;
+    right: -6%;
+    background: var(--sky-soft);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .d .wash {
+      animation: drift 14s ease-in-out infinite alternate;
+    }
+
+    .d .wash--sky {
+      animation-duration: 18s;
+    }
+  }
+
+  @keyframes drift {
+    to {
+      transform: translate(-8%, 10%) scale(1.12);
+    }
+  }
+
+  /* ---------- Abschnittskopf ---------- */
+  .d .section-head {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .d .section-head > * + * {
+    margin-top: 20px;
+  }
+
+  .d .section-head p:not(.label) {
+    font-size: 17px;
+  }
+
+  /* ---------- Leistungen ---------- */
+  .d .hilfen {
+    width: var(--wrap);
+    margin: 0 auto;
+    padding-bottom: clamp(96px, 12vw, 176px);
+  }
+
+  .d .cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 64px;
+  }
+
+  .d .card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 40px;
+    border: 1px solid var(--ash);
+    border-radius: 40px;
+    background: #fbf9f6;
+    scroll-margin-top: 120px;
+    transition:
+      border-color 0.3s ease,
+      background-color 0.3s ease,
+      transform 0.4s var(--ease);
+  }
+
+  .d .card:hover {
+    border-color: var(--apricot);
+    background: #fff8f1;
+    transform: translateY(-3px);
+  }
+
+  .d .card:target {
+    border-color: var(--accent);
+  }
+
+  .d .tag {
+    align-self: flex-start;
+    padding: 4px 12px;
+    border: 1px solid var(--ash);
+    border-radius: 100px;
+    color: var(--smoke);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .d .card__fuer {
+    font-size: 15px;
+  }
+
+  .d .card__more {
+    margin-top: auto;
+  }
+
+  .d .card__more summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .d .card__more summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .d .card__more summary::after {
+    content: '+';
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--ash);
+    border-radius: 50%;
+    font-size: 16px;
+    transition: transform 0.3s var(--ease);
+  }
+
+  .d .card__more[open] summary::after {
+    transform: rotate(45deg);
+  }
+
+  .d .card__detail {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .d .card__detail > * + * {
+    margin-top: 10px;
+  }
+
+  .d .card__detail h4 {
+    margin-top: 18px;
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .d .card__detail ul {
+    padding-left: 18px;
+  }
+
+  .d .card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 10px;
+  }
+
+  @media (max-width: 1100px) {
+    .d .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 680px) {
+    .d .cards {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .d .card {
+      padding: 28px;
+      border-radius: 28px;
+    }
+  }
+
+  /* ---------- Arbeitsweise ---------- */
+  .d .arbeit {
+    width: var(--wrap);
+    margin: 0 auto;
+  }
+
+  .d .arbeit__panel {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(48px, 7vw, 104px) clamp(28px, 6vw, 96px);
+    border-radius: 40px;
+    background: var(--sand);
+    isolation: isolate;
+  }
+
+  .d .arbeit__panel > :not(.wash) {
+    position: relative;
+  }
+
+  .d .arbeit__panel .wash {
+    z-index: -1;
+  }
+
+  .d .arbeit h2 {
+    max-width: 16ch;
+    margin-top: 20px;
+  }
+
+  .d .track {
+    position: relative;
+    height: 1px;
+    margin-top: 64px;
+    background: var(--ink);
+    opacity: 0.35;
+  }
+
+  .d .track__dot {
+    position: absolute;
+    top: -6px;
+    left: calc(var(--p, 0) * (100% - 13px));
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 1;
+  }
+
+  .d .stufen {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+    margin: 32px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .d .stufen p {
+    max-width: 34ch;
+    margin-top: 12px;
+    color: var(--ink);
+  }
+
+  @media (max-width: 760px) {
+    .d .stufen {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ---------- Haltung ---------- */
+  .d .haltung {
+    width: var(--wrap);
+    margin: 0 auto;
+    padding-block: clamp(96px, 12vw, 176px);
+  }
+
+  .d .haltung__quote {
+    max-width: 24ch;
+    margin-top: 24px;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: clamp(34px, 4.4vw, 64px);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .d .haltung__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 96px);
+    align-items: end;
+    margin-top: 64px;
+  }
+
+  .d .haltung__text p {
+    max-width: 52ch;
+    font-size: 17px;
+  }
+
+  .d .haltung__text p + p {
+    margin-top: 20px;
+  }
+
+  @media (max-width: 860px) {
+    .d .vision,
+    .d .haltung__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ---------- Team ---------- */
+  .d .team {
+    width: var(--wrap);
+    margin: 0 auto;
+    padding-bottom: clamp(96px, 12vw, 176px);
+  }
+
+  .d .people {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 64px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--ash);
+    list-style: none;
+  }
+
+  .d .person {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 32px 28px 8px 0;
+  }
+
+  .d .person + .person {
+    padding-left: 28px;
+    border-left: 1px solid var(--ash);
+  }
+
+  .d .person__initials {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--butter-soft);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 22px;
+  }
+
+  .d .person__role {
+    color: var(--smoke);
+    font-size: 14px;
+  }
+
+  .d .person .pill {
+    margin-top: auto;
+  }
+
+  @media (max-width: 960px) {
+    .d .people {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .d .person:nth-child(3) {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .d .person:nth-child(n + 3) {
+      border-top: 1px solid var(--ash);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .d .people {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .d .person,
+    .d .person + .person {
+      padding: 24px 0;
+      border-left: 0;
+    }
+
+    .d .person + .person {
+      border-top: 1px solid var(--ash);
+    }
+  }
+
+  /* ---------- Kontakt ---------- */
+  .d .kontakt {
+    width: var(--wrap);
+    margin: 0 auto;
+    padding-bottom: clamp(80px, 10vw, 140px);
+  }
+
+  .d .kontakt__panel {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(64px, 9vw, 128px) var(--gutter);
+    border-radius: 40px;
+    background: #242424;
+    color: #d8d3cd;
+    text-align: center;
+    isolation: isolate;
+  }
+
+  .d .kontakt__panel > :not(.flow__glow) {
+    position: relative;
+  }
+
+  .d .flow__glow--cta {
+    top: 0;
+    width: 60%;
+    z-index: -1;
+    opacity: 0.55;
+  }
+
+  .d .kontakt h2 {
+    margin-top: 24px;
+    color: var(--parchment);
+    font-size: clamp(40px, 5vw, 72px);
+  }
+
+  .d .kontakt p {
+    max-width: 46ch;
+    margin: 20px auto 0;
+  }
+
+  .d .kontakt__sun {
+    display: inline-grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--parchment);
+  }
+
+  .d .kontakt__sun svg {
+    width: 62%;
+  }
+
+  .d .kontakt__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 36px !important;
+    max-width: none !important;
+  }
+
+  .d .kontakt .pill--dark {
+    border-color: #4a4744;
+    background: transparent;
+    text-transform: none;
+  }
+
+  .d .kontakt .pill--dark:hover {
+    border-color: var(--parchment);
+  }
+
+  /* ---------- Footer ---------- */
+  .d .foot {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 32px;
+    width: var(--wrap);
+    margin: 0 auto;
+    padding: 56px 0 40px;
+    border-top: 1px solid var(--ash);
+    font-size: 14px;
+  }
+
+  .d .foot .label {
+    margin-bottom: 12px;
+  }
+
+  .d .foot p + p {
+    margin-top: 10px;
+  }
+
+  .d .foot__brand svg {
+    width: auto;
+    height: 44px;
+    margin-bottom: 16px;
+  }
+
+  .d .foot__meta {
+    grid-column: 1 / -1;
+    padding-top: 24px;
+    border-top: 1px solid var(--ash);
+    color: var(--smoke);
+    font-size: 13px;
+  }
+
+  @media (max-width: 860px) {
+    .d .foot {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .d .foot__brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .d .foot {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  /* ---------- Logo: Sonne gibt Strahlen ab ---------- */
+  .d .helios-mark {
+    display: block;
+    overflow: visible;
+  }
+
+  .d .helios-mark .ray,
+  .d .helios-mark .sun {
+    transform-box: view-box;
+    transform-origin: 52px 74px;
+  }
+
+  .d .helios-mark--icon .ray,
+  .d .helios-mark--icon .sun {
+    transform-origin: 52px 46px;
+  }
+
+  .d .bar__logo .helios-mark {
+    width: auto;
+    height: 56px;
+  }
+
+  .d .foot__brand .helios-mark {
+    width: auto;
+    height: 64px;
+    margin-bottom: 16px;
+  }
+
+  .d .hub__sun .helios-mark,
+  .d .kontakt__sun .helios-mark {
+    width: 70%;
+    height: auto;
+  }
+
+  @media (max-width: 1000px) {
+    .d .bar__logo .helios-mark {
+      height: 42px;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Einstieg: Sonne, dann nacheinander die drei Strahlen, dann die Schrift */
+    .js .d .mark-intro .sun {
+      animation: d-sun-in 700ms cubic-bezier(0.23, 1, 0.32, 1) 100ms both;
+    }
+    .js .d .mark-intro .ray {
+      animation: d-ray-out 800ms cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+    .js .d .mark-intro .ray--1 {
+      animation-delay: 420ms;
+    }
+    .js .d .mark-intro .ray--2 {
+      animation-delay: 540ms;
+    }
+    .js .d .mark-intro .ray--3 {
+      animation-delay: 660ms;
+    }
+    .js .d .mark-intro .mark__word {
+      animation: d-word-in 700ms cubic-bezier(0.23, 1, 0.32, 1) 760ms both;
+    }
+
+    /* Sonne im Diagramm: geht auf, gibt Strahlen ab und sendet weiter –
+       passend zu den Punkten, die von ihr zu den Hilfen wandern */
+    .js .d .mark-emit .sun {
+      animation:
+        d-sun-in 900ms cubic-bezier(0.23, 1, 0.32, 1) 1.1s both,
+        d-sun-glow 4.8s ease-in-out 3s infinite;
+    }
+    .js .d .mark-emit .ray {
+      animation:
+        d-ray-out 900ms cubic-bezier(0.23, 1, 0.32, 1) both,
+        d-ray-pulse 4.8s ease-in-out infinite;
+    }
+    .js .d .mark-emit .ray--1 {
+      animation-delay: 1.5s, 3s;
+    }
+    .js .d .mark-emit .ray--2 {
+      animation-delay: 1.65s, 3.15s;
+    }
+    .js .d .mark-emit .ray--3 {
+      animation-delay: 1.8s, 3.3s;
+    }
+  }
+
+  @keyframes d-sun-in {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+  }
+
+  @keyframes d-ray-out {
+    from {
+      opacity: 0;
+      transform: scale(0.55);
+    }
+  }
+
+  @keyframes d-word-in {
+    from {
+      opacity: 0;
+      transform: translateX(-12px);
+    }
+  }
+
+  @keyframes d-sun-glow {
+    0%,
+    100% {
+      transform: none;
+    }
+    12% {
+      transform: scale(1.06);
+    }
+  }
+
+  /* Ein Strahl löst sich kurz von der Sonne – gestaffelt eine Welle nach außen */
+  @keyframes d-ray-pulse {
+    0%,
+    30%,
+    100% {
+      transform: none;
+    }
+    14% {
+      transform: scale(1.07);
+    }
+  }
+
+  /* ---------- Leistungen: Seitenpanel statt Aufklappen ---------- */
+  .d .cards {
+    align-items: start;
+  }
+
+  .d .drawer {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: min(560px, 100vw);
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 32px 0 0 32px;
+    background: #fbf9f6;
+    color: var(--graphite);
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.6;
+    transition: transform 400ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .d .drawer[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .d .drawer::backdrop {
+    background: rgba(29, 28, 27, 0.35);
+    transition: opacity 300ms ease;
+  }
+
+  @starting-style {
+    .d .drawer[open] {
+      transform: translateX(100%);
+    }
+    .d .drawer[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  /* Schließen schneller als Öffnen */
+  .d .drawer.is-closing {
+    transform: translateX(100%);
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .d .drawer.is-closing::backdrop {
+    opacity: 0;
+  }
+
+  .d .drawer__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 32px 32px 20px;
+    border-bottom: 1px solid var(--ash);
+  }
+
+  .d .drawer__head h3 {
+    margin-top: 12px;
+    font-size: 30px;
+  }
+
+  .d .drawer__close {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--ash);
+    border-radius: 50%;
+    background: var(--parchment);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      background-color 200ms ease,
+      transform 160ms ease-out;
+  }
+
+  .d .drawer__close:hover {
+    background: var(--sand);
+  }
+
+  .d .drawer__close:active {
+    transform: scale(0.95);
+  }
+
+  .d .drawer__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 32px 40px;
+    overscroll-behavior: contain;
+  }
+
+  .d .drawer__body > * + * {
+    margin-top: 12px;
+  }
+
+  .d .drawer__body h4 {
+    margin-top: 24px;
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .d .drawer__body ul {
+    padding-left: 18px;
+  }
+
+  .d .drawer__body .card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 28px;
+  }
+
+  /* Telefon: Panel kommt als Blatt von unten */
+  @media (max-width: 640px) {
+    .d .drawer {
+      inset: auto 0 0 0;
+      width: 100vw;
+      height: 88dvh;
+      border-radius: 28px 28px 0 0;
+    }
+
+    @starting-style {
+      .d .drawer[open] {
+        transform: translateY(100%);
+      }
+    }
+
+    .d .drawer.is-closing {
+      transform: translateY(100%);
+    }
+
+    .d .drawer__head,
+    .d .drawer__body {
+      padding-inline: 22px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .d .drawer,
+    .d .drawer.is-closing {
+      transition: none;
+    }
+  }
+  /* ---------- Diagramm ruhiger und kleiner (Kundenwunsch 26.10.2026) ---------- */
+  .d .flow {
+    max-width: 980px;
+    margin-inline: auto;
+  }
+
+  .d .flow__glow {
+    display: none;
+  }
+
+  .d .line__dash {
+    display: none;
+  }
+
+  .d .line__base {
+    stroke-width: 1;
+  }
+
+  /* Logo frei, ohne Kreis und Rahmen */
+  .d .hub__sun {
+    inset: 28%;
+    border: 0;
+    background: none;
+  }
+
+  .d .hub__sun .helios-mark {
+    width: 100%;
+  }
+
+  .d .node {
+    min-height: 36px;
+    padding: 6px 14px;
+    font-size: 12px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Nur einmal: Sonne erscheint, Strahlen treten heraus – kein Dauerpulsieren */
+    .js .d .mark-emit .sun {
+      animation: d-sun-in 700ms cubic-bezier(0.23, 1, 0.32, 1) 900ms both;
+    }
+    .js .d .mark-emit .ray {
+      animation: d-ray-out 700ms cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+    .js .d .mark-emit .ray--1 {
+      animation-delay: 1.2s;
+    }
+    .js .d .mark-emit .ray--2 {
+      animation-delay: 1.3s;
+    }
+    .js .d .mark-emit .ray--3 {
+      animation-delay: 1.4s;
+    }
+  }
+  /* Leistungskarten gleich hoch, „Mehr erfahren“ immer unten */
+  .d .cards {
+    align-items: stretch;
+    grid-auto-rows: 1fr; /* alle Reihen so hoch wie die höchste Karte */
+  }
+
+  /* Leitbild: Headline steht direkt über dem Text, beides oben bündig zum Bild */
+  .d .haltung__grid {
+    align-items: start;
+    margin-top: 0;
+  }
+
+  .d .haltung__text .haltung__quote {
+    margin: 20px 0 32px;
+    font-size: clamp(30px, 3.2vw, 48px);
+  }
+</style>
+

@@ -1,0 +1,78 @@
+---
+import { leistungen } from '../data/site';
+---
+
+<section class="section leistungen" id="leistungen">
+  <div class="container leistungen__grid">
+    <div data-anim="ltr" style="--dur:1s">
+      <div class="leistungen__intro" data-parallax="1" data-parallax-center>
+        <h2 class="badge">Unsere Leistungen</h2>
+        <p>
+          Gemeinsam mit den Hilfesuchenden und dem ortsansässigen Jugendamt wird jede Hilfe bedarfsgerecht und individuell
+          gestaltet. Dabei verfolgen wir einen ganzheitlichen systemischen Ansatz. Wir garantieren eine schnelle Einleitung
+          der Hilfe, eine hohe Flexibilität und Erreichbarkeit für Klienten und Auftraggeber. Die Hilfen werden stets
+          alltagspraktisch und einfach „nah“ am Menschen gestaltet.
+        </p>
+      </div>
+    </div>
+
+    <div data-anim="fade" style="--dur:1s;--delay:200ms">
+      <div class="accordion">
+        {
+          leistungen.map((l) => (
+            <div class="acc" id={l.id}>
+              <h3 class="acc__title">
+                <button
+                  class="acc__button"
+                  type="button"
+                  data-acc
+                  aria-expanded="false"
+                  aria-controls={`${l.id}-inhalt`}
+                  id={`${l.id}-titel`}
+                >
+                  {l.title}
+                </button>
+              </h3>
+              <div class="acc__panel" id={`${l.id}-inhalt`} role="region" aria-labelledby={`${l.id}-titel`} hidden>
+                <div class="acc__body">
+                  {l.intro.length > 0 && (
+                    <p>
+                      {l.intro.map((line, i) => (
+                        <>
+                          {i > 0 && <br />}
+                          {line}
+                        </>
+                      ))}
+                    </p>
+                  )}
+                  {l.blocks.map((b) =>
+                    b.type === 'h' ? (
+                      <p class="acc__h">
+                        <strong>{b.text}</strong>
+                      </p>
+                    ) : b.type === 'p' ? (
+                      <p>{b.text}</p>
+                    ) : (
+                      <ul>
+                        {b.items.map((item) => (
+                          <li>{item}</li>
+                        ))}
+                      </ul>
+                    ),
+                  )}
+                  {l.law && (
+                    <p class="acc__law">
+                      <a class="link-underline" href={l.law.href} target="_blank" rel="noopener">
+                        <span>{l.law.label}</span>
+                      </a>
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

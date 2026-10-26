@@ -1,0 +1,65 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** One-Pager-Startseite: Menü verlinkt auf Anker, Punkt-Navigation sichtbar */
+  home?: boolean;
+  /** Design-Variante (Entwurf C): ergänzt Markup, das nur dort gilt */
+  variant?: 'c';
+  noindex?: boolean;
+}
+
+const siteName = 'HELIOS – Kinder- und Familienhilfe';
+const {
+  title,
+  description = 'HELIOS Hilfen GmbH: freier Träger der ambulanten Kinder- und Jugendhilfe mit Sitz in Bad Vilbel.',
+  home = false,
+  variant,
+  noindex = false,
+} = Astro.props;
+const fullTitle = title ? `${title} – ${siteName}` : `${siteName} – Freier Träger der ambulanten Kinder- und Familienhilfe`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="de" data-variant={variant}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#f7f7f7" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    {variant && <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>}
+    <Header home={home} variant={variant} />
+    <main id="inhalt">
+      <slot />
+    </main>
+    <Footer variant={variant} />
+    <button class="to-top" type="button" data-to-top aria-label="Nach oben">
+      <svg width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+        <path d="M1 6.5 6 1.5l5 5" stroke="currentColor" stroke-width="1.6"></path>
+      </svg>
+    </button>
+    <script>
+      import { initSite } from '../scripts/motion';
+      initSite();
+    </script>
+  </body>
+</html>

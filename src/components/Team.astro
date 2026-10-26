@@ -1,0 +1,62 @@
+---
+import { Image } from 'astro:assets';
+import avatar from '../assets/images/avatar.png';
+import { team } from '../data/site';
+
+interface Props {
+  /** Entwurf C: Initialen statt gleichem Avatar, Mail-Link mit Text */
+  variant?: 'c';
+}
+
+const { variant } = Astro.props;
+// „Philipp Z. Açba“ → „PA“
+const initials = (name: string) => {
+  const parts = name.split(' ').filter((w) => !w.endsWith('.'));
+  return (parts[0][0] + parts.at(-1)![0]).toUpperCase();
+};
+
+// Mail-Adressen stehen ROT13-kodiert im HTML und werden per JS zu mailto-Links
+const rot13 = (s: string) =>
+  s.replace(/[a-z]/gi, (c) => {
+    const base = c <= 'Z' ? 65 : 97;
+    return String.fromCharCode(((c.charCodeAt(0) - base + 13) % 26) + base);
+  });
+---
+
+<section class="section" id="unser-team">
+  <div class="container team" data-anim="btt" style="--dur:0.6s">
+    <h2 class="badge">Unser Team</h2>
+    <ul class="team__grid">
+      {
+        team.map((p) => (
+          <li class="card">
+            {variant ? (
+              <span class="card__initials" aria-hidden="true">
+                {initials(p.name)}
+              </span>
+            ) : (
+              <Image class="card__avatar" src={avatar} alt="" widths={[180, 360]} sizes="180px" />
+            )}
+            <h3 class="card__name">{p.name}</h3>
+            <p class="card__role">
+              {p.lines.map((l) => (
+                <span>{l}</span>
+              ))}
+              <span>
+                <strong>{p.role}</strong>
+              </span>
+            </p>
+            <hr class="card__rule" />
+            <a class="card__mail" href="#" data-mail={rot13(p.email)} aria-label={`E-Mail an ${p.name}`}>
+              <svg width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true">
+                <rect x="0.75" y="0.75" width="13.5" height="10.5" rx="1" stroke="currentColor" stroke-width="1.2" />
+                <path d="m1 1.5 6.5 5 6.5-5" stroke="currentColor" stroke-width="1.2" />
+              </svg>
+              {variant && <span>E-Mail schreiben</span>}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

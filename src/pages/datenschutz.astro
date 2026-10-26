@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { contact } from '../data/site';
+---
+
+<BaseLayout title="Datenschutzerklärung" description="Datenschutzerklärung der HELIOS Hilfen GmbH.">
+  <section class="section legal">
+    <div class="container">
+      <div class="legal__inner">
+        <h1>Datenschutzerklärung</h1>
+
+        <!-- Platzhalter: Die Erklärung der WordPress-Seite (Datenschutz-Generator.de)
+             beschreibt Cookies, Statistik und Hosting, die es hier nicht mehr gibt.
+             Vor Livegang für das neue Setup neu erstellen. -->
+        <p class="note">
+          Diese Datenschutzerklärung wird für die neue Website überarbeitet (Hosting bei Cloudflare, keine Cookies,
+          Google Maps erst nach Klick).
+        </p>
+
+        <h2>Verantwortlicher</h2>
+        <p>
+          {contact.company}<br />
+          {contact.street}<br />
+          {contact.city}
+        </p>
+        <p>Vertretungsberechtigte Personen: Geschäftsführung: {contact.management}</p>
+        <p>E-Mail-Adresse: {contact.email.replace('@', '(at)')}</p>
+        <p>Impressum: <a href="/impressum">www.helios-hilfen.de/impressum</a></p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

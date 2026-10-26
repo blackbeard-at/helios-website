@@ -1,0 +1,29 @@
+---
+// Schlankes Layout für die Design-Entwürfe: nur Kopf, Schrift und Grundstil.
+// Header und Footer bringt jeder Entwurf selbst mit. Nicht indexieren.
+import '@fontsource-variable/montserrat';
+import '../styles/draft-base.css';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{title} – HELIOS</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,159 @@
+/* Grundstil der Entwürfe: Reset, CI-Farben, Schrift, Raster, Bewegung.
+   CI: Logo-Orange, Hellorange, Gelb aus dem HELIOS-Logo, Montserrat. */
+
+:root {
+  --orange: #ec6622;
+  --orange-2: #f39222;
+  --yellow: #fdc41a;
+  --paper: #f7f7f7;
+  --white: #ffffff;
+  --ink: #1f1d1c;
+  --ink-2: #323335;
+  --muted: #55555a;
+  --deep: #4a1a05;
+
+  /* Fünf Schriftgrößen für die ganze Seite (+16px nur in Knöpfen) */
+  --t-display: clamp(64px, 9.2vw, 140px);
+  --t-h2: clamp(36px, 4.4vw, 64px);
+  --t-lead: clamp(20px, 1.6vw, 24px);
+  --t-body: 18px;
+  --t-small: 14px;
+
+  --font: 'Montserrat Variable', 'Montserrat', system-ui, sans-serif;
+  --margin: clamp(20px, 2.2vw, 32px);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 18px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+figure,
+blockquote {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--yellow);
+  color: var(--ink);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Ein Knopf für die ganze Seite: flach, eckig */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 22px;
+  border: 0;
+  background: var(--ink);
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s var(--ease-out);
+}
+
+.btn:hover {
+  background: var(--deep);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.link {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+  transition: text-underline-offset 0.2s var(--ease-out);
+}
+
+.link:hover {
+  text-underline-offset: 0.32em;
+}
+
+/* Eintritt pro Abschnitt: Teile steigen nacheinander auf (nur mit JS) */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-rise] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.7s var(--ease-out),
+      transform 0.8s var(--ease-out);
+    transition-delay: calc(var(--n, 0) * 75ms);
+  }
+
+  .js [data-rise].is-in {
+    opacity: 1;
+    transform: none;
+  }
+}

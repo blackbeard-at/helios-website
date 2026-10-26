@@ -1,0 +1,19 @@
+---
+// Punkt-Navigation am rechten Rand (Uncode „onepage pagination“)
+import { sections } from '../data/site';
+---
+
+<ul class="dots" aria-label="Abschnitte">
+  {
+    sections.map((s) => (
+      <li>
+        <a href={`#${s.id}`} data-spy aria-label={s.label}>
+          <span class="dots__dot" />
+          <span class="dots__label" aria-hidden="true">
+            {s.label}
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,64 @@
+---
+import { Picture } from 'astro:assets';
+import SplitHeading from './SplitHeading.astro';
+import hero from '../assets/images/hero.jpg';
+import { contact } from '../data/site';
+
+interface Props {
+  /** Entwurf C: Tagline und Fließtext als Absätze, dazu Kontakt-Knöpfe */
+  variant?: 'c';
+}
+
+const { variant } = Astro.props;
+---
+
+<section class="section hero" id="willkommen">
+  <div class="container hero__content" data-anim="fade" style="--dur:1s">
+    <SplitHeading
+      as={variant ? 'p' : 'h2'}
+      class="hero__tagline"
+      highlight="label"
+      lines={['[[Freier Träger der Kinder- und Jugendhilfe]]']}
+    />
+    <SplitHeading as="h1" class="hero__title" highlight="marker" curtain lines={['Willkommen bei [[HELIOS]]']} />
+
+    <div class="hero__grid">
+      <div data-anim="zoom" style="--dur:1s">
+        <div class="media hero__media" data-parallax="3">
+          <Picture
+            src={hero}
+            formats={['avif', 'webp']}
+            widths={[640, 960, 1280, 1600]}
+            sizes="(min-width: 960px) 56vw, 100vw"
+            alt="Eine Gruppe Jugendlicher sitzt lachend auf dem Rand einer Skateboard-Bowl"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+      </div>
+      <div data-parallax="1" data-parallax-center>
+        <SplitHeading
+          as={variant ? 'p' : 'h3'}
+          class="hero__text"
+          lines={[
+            'Wir sind ein freier Träger der ambulanten Kinder- und Jugendhilfe mit Sitz in Bad Vilbel.',
+            '[[Unser Team setzt sich für eine selbstbestimmte und positive Zukunftsperspektive junger Menschen und ihrer Familien ein.]] In enger Zusammenarbeit mit den örtlichen Jugendämtern setzen wir hierfür bedarfsgerechte und nachhaltig wirksame sozialpädagogische Maßnahmen um.',
+            'Wir sind ein heterogenes, multiprofessionelles Fachkräfteteam aus unterschiedlichen pädagogischen und psychologischen Disziplinen. Dadurch können wir flexibel auf individuelle Bedarfe reagieren und maßgeschneiderte, personenorientierte Lösungen entwickeln.',
+          ]}
+        />
+        {
+          variant && (
+            <p class="hero__actions">
+              <a class="button" href={`mailto:${contact.email}?subject=${encodeURIComponent('Anfrage über die Website')}`}>
+                Hilfe anfragen
+              </a>
+              <a class="text-link" href="#leistungen">
+                Unsere Leistungen
+              </a>
+            </p>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>

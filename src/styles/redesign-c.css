@@ -1,0 +1,387 @@
+/* Entwurf C – gezielte Verbesserungen der bestehenden Startseite.
+   Alles hängt an [data-variant='c'], die Originalseite bleibt unberührt.
+   Reihenfolge wie im Audit: Typo, Farbe, Zustände, Layout, Komponenten. */
+
+/* ---------- Grundlagen ---------- */
+
+[data-variant='c'] {
+  --text: #55555a; /* statt #777: 7,4:1 auf Weiß */
+  --container: 1320px;
+}
+
+[data-variant='c'] body {
+  color: var(--text);
+}
+
+[data-variant='c'] :is(h1, h2, h3, .badge, .acc__title, .card__name) {
+  text-wrap: balance;
+}
+
+[data-variant='c'] :is(p, li) {
+  text-wrap: pretty;
+}
+
+/* Inhalte laufen auf großen Bildschirmen nicht mehr bis an den Rand */
+@media (min-width: 960px) {
+  [data-variant='c'] .container {
+    max-width: min(90%, var(--container));
+  }
+}
+
+[data-variant='c'] .skip-link {
+  position: fixed;
+  z-index: 60;
+  top: 12px;
+  left: 12px;
+  padding: 12px 18px;
+  border-radius: 4px;
+  background: var(--dark);
+  color: var(--white);
+  font-weight: 600;
+  transform: translateY(-160%);
+  transition: transform 0.2s ease;
+}
+
+[data-variant='c'] .skip-link:focus {
+  transform: none;
+}
+
+/* ---------- Knöpfe und Links ---------- */
+
+[data-variant='c'] .button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 12px 24px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+[data-variant='c'] .button:hover {
+  background: #d4561a;
+  transform: translateY(-1px);
+}
+
+[data-variant='c'] .button:active {
+  transform: scale(0.98);
+}
+
+[data-variant='c'] .text-link {
+  color: var(--dark);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+  transition:
+    color 0.2s ease,
+    text-underline-offset 0.2s ease;
+}
+
+[data-variant='c'] .text-link:hover {
+  color: var(--accent);
+  text-underline-offset: 0.35em;
+}
+
+/* Kontakt-Knopf im Menü */
+[data-variant='c'] .nav__list {
+  align-items: center;
+}
+
+[data-variant='c'] .nav__cta {
+  display: block;
+  padding: 12px 20px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+[data-variant='c'] .nav__cta:hover {
+  background: #d4561a;
+}
+
+[data-variant='c'] .nav__cta:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 959px) {
+  [data-variant='c'] .nav__cta {
+    padding: 16px 28px;
+    font-size: 16px;
+  }
+
+  [data-variant='c'] .nav-open .nav__cta {
+    animation: nav-in 0.5s var(--ease-out) both;
+    animation-delay: calc(var(--i) * 60ms + 80ms);
+  }
+}
+
+/* ---------- Hero ---------- */
+
+[data-variant='c'] .hero__title {
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+
+/* Tagline in normaler Schreibweise: bricht auf dem Handy nicht mehr um */
+[data-variant='c'] .hero__tagline {
+  /* Fast-Weiß auf Orange erreichte nur 3:1, dunkle Schrift 5:1 */
+  color: #1f1d1c;
+  font-size: 15px;
+  text-transform: none;
+}
+
+[data-variant='c'] .hero__text {
+  color: var(--dark);
+}
+
+[data-variant='c'] .hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 28px;
+  margin-top: 36px;
+}
+
+@media (max-width: 959px) {
+  /* Graue Fläche nur hinter Tagline und Headline statt als schmaler Streifen */
+  [data-variant='c'] .hero::before {
+    width: 100%;
+    height: clamp(220px, 34vw, 300px);
+  }
+
+  /* Tablet: Textspalte nutzt die volle Breite */
+  [data-variant='c'] .hero__text {
+    max-width: 62ch;
+  }
+}
+
+@media (max-width: 569px) {
+  [data-variant='c'] .hero__tagline {
+    font-size: 13px;
+  }
+
+  [data-variant='c'] .hero__actions .button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ---------- Abschnittsüberschriften ----------
+   Statt kleiner Großbuchstaben-Etiketten echte Überschriften in Satzschreibweise,
+   mit dem Marker aus dem Hero (wie hinter „HELIOS“). */
+
+[data-variant='c'] .badge {
+  padding: 0 0.06em;
+  background: linear-gradient(transparent 60%, rgba(236, 102, 34, 0.85) 60%, rgba(236, 102, 34, 0.85) 90%, transparent 90%);
+  color: var(--dark);
+  font-size: clamp(30px, 3.2vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-transform: none;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ---------- Abstände: Abschnitte atmen ---------- */
+
+[data-variant='c'] .split-row {
+  padding-block: 120px 132px;
+}
+
+[data-variant='c'] .split-row .lead {
+  max-width: 60ch;
+  margin-top: 28px;
+}
+
+[data-variant='c'] .split-row--leitbild {
+  padding-bottom: 168px;
+}
+
+[data-variant='c'] .media--shadow {
+  box-shadow: 0 48px 90px -36px rgba(236, 102, 34, 0.45);
+}
+
+[data-variant='c'] .leistungen__grid {
+  padding-block: 132px 148px;
+}
+
+[data-variant='c'] .leistungen__intro p {
+  margin-top: 28px;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+[data-variant='c'] .acc__button {
+  transition:
+    color 0.2s ease,
+    padding-left 0.25s ease;
+}
+
+[data-variant='c'] .acc__button:hover {
+  padding-left: 6px;
+}
+
+[data-variant='c'] .acc__button[aria-expanded='true'] {
+  padding-left: 0;
+}
+
+/* Lange Leistungstexte auf Lesebreite begrenzen */
+[data-variant='c'] .acc__body {
+  max-width: 68ch;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+@media (max-width: 959px) {
+  [data-variant='c'] .split-row {
+    padding-block: 72px 84px;
+  }
+
+  [data-variant='c'] .split-row--leitbild {
+    padding-bottom: 96px;
+  }
+
+  [data-variant='c'] .leistungen__grid {
+    padding-block: 84px 96px;
+  }
+}
+
+/* ---------- Team ----------
+   Karten ohne Schatten (nur Tonstufe), Initialen statt viermal derselbe
+   Avatar, Mail-Link mit Text und immer auf gleicher Höhe. */
+
+[data-variant='c'] .team {
+  padding-top: 120px;
+  padding-bottom: 148px;
+}
+
+[data-variant='c'] .team__grid {
+  gap: 24px;
+  align-items: stretch;
+  margin-top: 48px;
+}
+
+[data-variant='c'] .card {
+  gap: 20px;
+  padding: 32px 24px 28px;
+  border-radius: 16px;
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+[data-variant='c'] .card:hover {
+  background: #fff1e8;
+  transform: translateY(-2px);
+}
+
+[data-variant='c'] .card__initials {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 24px;
+  background: var(--accent);
+  color: var(--white);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+[data-variant='c'] .card__role {
+  line-height: 1.45;
+}
+
+[data-variant='c'] .card__rule {
+  margin-top: auto;
+  background: #e2e2e2;
+}
+
+[data-variant='c'] .card__mail {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  width: auto;
+  height: auto;
+  min-height: 44px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+[data-variant='c'] .card__mail span {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+
+@media (max-width: 959px) {
+  [data-variant='c'] .team {
+    padding-top: 84px;
+    padding-bottom: 96px;
+  }
+}
+
+/* Handy: zwei Karten nebeneinander statt einer pro Bildschirm */
+@media (max-width: 569px) {
+  [data-variant='c'] .team__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  [data-variant='c'] .card {
+    gap: 14px;
+    padding: 20px 14px;
+  }
+
+  [data-variant='c'] .card__initials {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    font-size: 22px;
+  }
+
+  [data-variant='c'] .card__name {
+    font-size: 16px;
+  }
+
+  [data-variant='c'] .card__role {
+    font-size: 13px;
+  }
+
+  [data-variant='c'] .card__mail {
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  /* In der schmalen Karte reicht der Text, das Symbol entfällt */
+  [data-variant='c'] .card__mail svg {
+    display: none;
+  }
+}
+
+/* ---------- Footer ---------- */
+
+[data-variant='c'] .footer__address a {
+  text-decoration: underline;
+  text-decoration-color: rgba(236, 102, 34, 0.6);
+  text-underline-offset: 0.2em;
+}

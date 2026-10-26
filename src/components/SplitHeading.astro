@@ -1,0 +1,80 @@
+---
+// Überschrift mit wortweise aufgeteiltem Text, wie im Original (Uncode
+// „split words“). Jede Zeile (`lines`) ist ein Block; `[[…]]` markiert
+// hervorgehobene Wörter. Hervorhebungen werden beim Einblenden Wort für
+// Wort von links nach rechts gezeichnet (Verzögerung über --d).
+//
+// highlight:
+//   'label'     Balken über die volle Höhe (Tagline im Hero)
+//   'marker'    Balken über die untere Hälfte (HELIOS in der Hero-Headline)
+//   'underline' dünne Linie unter dem Text (Fließtext im Hero)
+interface Props {
+  as?: 'h1' | 'h2' | 'h3' | 'h6' | 'p';
+  lines: string[];
+  class?: string;
+  highlight?: 'label' | 'marker' | 'underline';
+  /** Wörter von unten einfliegen lassen (Hero-Headline) */
+  curtain?: boolean;
+  /** Startverzögerung der ersten Hervorhebung in ms */
+  delay?: number;
+  /** Abstand zwischen den Wörtern einer Hervorhebung in ms */
+  step?: number;
+}
+
+const {
+  as: Tag = 'h2',
+  lines,
+  class: className,
+  highlight = 'underline',
+  curtain = false,
+  delay = 400,
+  step = 200,
+} = Astro.props;
+
+type Word = { text: string; hl: boolean; first: boolean; last: boolean; d: number; i: number };
+
+let hlIndex = 0;
+let wordIndex = 0;
+const parsed: Word[][] = lines.map((line) => {
+  const words: Word[] = [];
+  // In [[…]]-Gruppen und normale Abschnitte zerlegen
+  for (const part of line.split(/(\[\[.*?\]\])/).filter(Boolean)) {
+    const hl = part.startsWith('[[');
+    const tokens = part.replace(/^\[\[|\]\]$/g, '').split(/\s+/).filter(Boolean);
+    tokens.forEach((text, i) => {
+      words.push({
+        text,
+        hl,
+        first: hl && i === 0,
+        last: hl && i === tokens.length - 1,
+        d: hl ? delay + step * hlIndex++ : 0,
+        i: wordIndex++,
+      });
+    });
+  }
+  return words;
+});
+---
+
+<Tag class:list={['split', `split--${highlight}`, { 'split--curtain': curtain }, className]} data-split>
+  {
+    parsed.map((words) => (
+      <span class="split__line">
+        {words.map((w, i) => (
+          <>
+            <span
+              class:list={['split__word', { 'is-hl': w.hl, 'is-first': w.first, 'is-last': w.last }]}
+              style={w.hl ? `--d:${w.d}ms` : curtain ? `--i:${w.i}` : undefined}
+            >
+              <span class="split__flow">
+                <span class="split__inner">{w.text}</span>
+              </span>
+              {w.hl && <span class="split__bar" aria-hidden="true" />}
+            </span>
+            {i < words.length - 1 && ' '}
+          </>
+        ))}
+      </span>
+    ))
+  }
+</Tag>

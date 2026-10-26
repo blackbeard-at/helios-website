@@ -1,0 +1,65 @@
+---
+import { Picture } from 'astro:assets';
+import vision from '../assets/images/vision.jpg';
+import leitbild from '../assets/images/leitbild.jpg';
+
+const pictureProps = {
+  formats: ['avif', 'webp'],
+  widths: [480, 720, 960, 1200],
+  sizes: '(min-width: 960px) 40vw, 100vw',
+} as const;
+---
+
+<section class="section" id="unser-leitbild">
+  <div class="container split-row">
+    <div class="split-row__media-wrap" data-anim="ltr" style="--dur:1s">
+      <div class="media media--shadow split-row__media" data-parallax="2" data-parallax-center>
+        <Picture
+          src={vision}
+          {...pictureProps}
+          alt="Eine Pädagogin zeigt zwei Jungen ein kleines Bäumchen, im Hintergrund bunte Symbole"
+        />
+      </div>
+    </div>
+    <div class="split-row__body" data-anim="fade" style="--dur:1s;--delay:200ms">
+      <div data-parallax="1" data-parallax-center>
+        <h2 class="badge">Unsere Vision</h2>
+        <p class="lead">
+          Unsere Vision ist eine Gesellschaft, in der junge Menschen – unabhängig von ihrer Herkunft – gleiche Chancen
+          auf ein selbstbestimmtes und eigenverantwortliches Leben erhalten.<br />
+          Wir stärken Kinder, Jugendliche und ihre Familien darin, ihre Potenziale zu entfalten und Herausforderungen
+          eigenständig zu meistern.<br />
+          Um dieser Vision gerecht zu werden, leiten folgende Werte unser Handeln:<br />
+          <strong>Respekt, Fairness, Vertrauen und Gleichberechtigung.</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="divider"></div>
+  </div>
+
+  <div class="container split-row split-row--leitbild">
+    <div class="split-row__body" data-anim="fade" style="--dur:1s;--delay:200ms">
+      <div data-parallax="1" data-parallax-center>
+        <h2 class="badge">Unser Leitbild</h2>
+        <p class="lead">
+          Wir richten unsere Arbeit konsequent an den Ressourcen und <strong
+            >Bedürfnissen der jungen Menschen und ihrer Familien</strong
+          > aus. Ziel ist es, durch nachhaltig wirksame Maßnahmen die Notwendigkeit sozialpädagogischer Hilfen langfristig
+          zu beenden und die Kompetenz zur selbstbestimmten und gesellschaftskompatiblen Lebensführung zu fördern.<br />
+          Unsere Fachkräfte entwickeln individuelle, ressourcenorientierte und systemische Handlungsstrategien, die sich
+          eng an der Lebenswelt der jungen Menschen orientieren.<br />
+          Durch eine vertrauensvolle Zusammenarbeit sowie eine regelmäßige und sensible Begleitung schaffen wir
+          tragfähige Beziehungen, die echte Veränderung ermöglichen.
+        </p>
+      </div>
+    </div>
+    <div class="split-row__media-wrap" data-anim="rtl" style="--dur:1s">
+      <div class="media media--shadow split-row__media" data-parallax="2" data-parallax-center>
+        <Picture src={leitbild} {...pictureProps} alt="Ein Vater baut mit zwei Söhnen ein Windrad-Modell zusammen" />
+      </div>
+    </div>
+  </div>
+</section>

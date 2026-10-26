@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { contact } from '../data/site';
+---
+
+<BaseLayout title="Impressum" description="Impressum der HELIOS Hilfen GmbH, Bad Vilbel.">
+  <section class="section legal">
+    <div class="container">
+      <div class="legal__inner">
+        <h1>Impressum</h1>
+
+        <h2>Diensteanbieter</h2>
+        <p>
+          {contact.company}<br />
+          {contact.street}<br />
+          {contact.city}<br />
+          Deutschland
+        </p>
+
+        <h2>Kontaktmöglichkeiten</h2>
+        <p>
+          E-Mail-Adresse: {contact.email.replace('@', '(at)')}<br />
+          Telefon: <a href={contact.phoneHref}>{contact.phone}</a><br />
+          Fax: {contact.fax}
+        </p>
+
+        <h2>Vertretungsberechtigte Person</h2>
+        <p>Geschäftsführung: {contact.management}</p>
+
+        <h2>Registereintrag</h2>
+        <p>{contact.court.replace(':', '')}, {contact.register}</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,48 @@
+---
+import Logo from '../assets/logos/helios-logo.svg';
+import { sections } from '../data/site';
+
+interface Props {
+  home?: boolean;
+  variant?: 'c';
+}
+
+const { home = false, variant } = Astro.props;
+// Auf Unterseiten führen die Menüpunkte zurück zu den Abschnitten der Startseite
+const href = (id: string) => (home ? `#${id}` : `/#${id}`);
+---
+
+<header class="header">
+  <div class="header__bar">
+    <div class="container header__inner">
+      <a class="header__logo" href={home ? '#willkommen' : '/'} aria-label="HELIOS – zur Startseite">
+        <Logo aria-hidden="true" />
+      </a>
+      <button class="burger" type="button" data-burger aria-expanded="false" aria-controls="hauptmenue" aria-label="Menü öffnen">
+        <span></span>
+      </button>
+      <nav class="nav" id="hauptmenue" aria-label="Hauptmenü">
+        <ul class="nav__list">
+          {
+            sections.map((s, i) => (
+              <li>
+                <a class="nav__link" href={href(s.id)} data-spy={home ? '' : undefined} style={`--i:${i}`}>
+                  {s.label}
+                </a>
+              </li>
+            ))
+          }
+          {
+            variant && (
+              <li class="nav__cta-item">
+                <a class="nav__cta" href="#kontakt" style={`--i:${sections.length}`}>
+                  Kontakt
+                </a>
+              </li>
+            )
+          }
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>

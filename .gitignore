@@ -1,0 +1,11 @@
+node_modules
+dist
+.astro
+.DS_Store
+.taste-skill
+.claude
+
+# Entwürfe, die nicht ins Repo sollen (lokal behalten)
+src/pages/entwurf-a.astro
+src/pages/entwurf-b.astro
+src/pages/entwurf-e.astro
